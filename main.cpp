@@ -77,3 +77,18 @@ TEST_CASE("Defaulted const ref makes no copy", "[Defaulted]")
     f5(CopyLogger(copyCount));
     REQUIRE(copyCount == 0);
 }
+
+struct GetDefaultZ
+{
+    static int get(int x, int y) { return x + y; }
+};
+
+int f6(int x, int y, fluent::DefaultedF<int, GetDefaultZ> z)
+{
+    return z.get_or_default(x, y);
+}
+
+TEST_CASE("DefaultedF on dependent parameter", "[Defaulted]")
+{
+    REQUIRE(f6(1, 5, fluent::defaultValue) == 6);
+}

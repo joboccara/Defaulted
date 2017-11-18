@@ -1,6 +1,8 @@
 #ifndef defaulted_h
 #define defaulted_h
 
+#include "optional.hpp"
+
 namespace fluent
 {
 
@@ -19,16 +21,28 @@ private:
     T value_;
 };
 
-template<typename T, typename GetValue>
+template<typename T, typename GetDefaultValue>
 class DefaultedF
 {
 public:
-    DefaultedF(T t) : value_(std::move(t)){}
-    DefaultedF(DefaultValue) : value_(GetValue::get()) {}
-    T const& get_or_default() const { return value_; }
-    T & get_or_default() { return value_; }
+    DefaultedF(T const& t) : value_(t){}
+    DefaultedF(T&& t) : value_(std::move(t)){}
+    DefaultedF(DefaultValue) : value_(fluent::nullopt) {}
+    
+    template<typename... Args>
+    auto get_or_default(Args&&... args) -> decltype(GetDefaultValue::get(std::forward<Args>(args)...))
+    {
+        if (value_)
+        {
+            return *value_;
+        }
+        else
+        {
+            return GetDefaultValue::get(std::forward<Args>(args)...);
+        }
+    }
 private:
-    T value_;
+    fluent::optional<T> value_;
 };
 
 }
