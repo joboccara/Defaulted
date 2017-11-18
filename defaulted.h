@@ -9,11 +9,16 @@ namespace fluent
 struct DefaultValue{};
 static const DefaultValue defaultValue;
 
-template<typename T, T... DefaultedParameters>
+template<typename T>
+using IsNotReference = typename std::enable_if<!std::is_reference<T>::value, void>::type;
+
+    template<typename T, T... DefaultedParameters>
 class Defaulted
 {
 public:
-    Defaulted(T t) : value_(std::move(t)){}
+    Defaulted(T const& t) : value_(t){}
+    template<typename T_ = T, typename = IsNotReference<T_>>
+    Defaulted(T&& t) : value_(std::move(t)){}
     Defaulted(DefaultValue) : value_(DefaultedParameters...) {}
     T const& get_or_default() const { return value_; }
     T & get_or_default() { return value_; }
@@ -26,6 +31,7 @@ class DefaultedF
 {
 public:
     DefaultedF(T const& t) : value_(t){}
+    template<typename T_ = T, typename = IsNotReference<T_>>
     DefaultedF(T&& t) : value_(std::move(t)){}
     DefaultedF(DefaultValue) : value_(fluent::nullopt) {}
     
