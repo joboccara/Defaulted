@@ -72,6 +72,31 @@ struct GetDefaultAmount{ static double get(){ return 45.6; } };
 void g(int x, DefaultedF<double, GetDefaultAmount> y, int z)
 ```
 
+##Default parameters that depend on other parameters
+
+Since C++ does not allow default values to depend on other parameters:
+```cpp
+void f(double x, double y, double z = x + y) // imaginary C++
+{
+std::cout << "x = " << x << '\n'
+<< "y = " << y << '\n'
+<< "z = " << z << '\n';
+}
+```
+
+`DefaultedF` allows default functions to accepts parameters, to which a function can pass the other parameters:
+
+```cpp
+struct GetDefaultAmount{ static double get(double x, double y){ return x + y; } };
+
+void f(double x, double y, DefaultedF<double, GetDefaultAmount> z)
+{
+std::cout << "x = " << x << '\n'
+<< "y = " << y << '\n'
+<< "z = " << z.get_or_default(x, y) << '\n';
+}
+```
+
 ## The particular case of the default default value
 
 A pretty common case for default parameters is when they take the value resulting from a call to the default constructor of their type: `T()`.
