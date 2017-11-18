@@ -36,7 +36,7 @@ public:
     DefaultedF(DefaultValue) : value_(fluent::nullopt) {}
     
     template<typename... Args>
-    auto get_or_default(Args&&... args) -> decltype(GetDefaultValue::get(std::forward<Args>(args)...))
+    T get_or_default(Args&&... args)
     {
         if (value_)
         {
