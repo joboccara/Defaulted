@@ -12,8 +12,8 @@ namespace fluent
     public:
         Defaulted(T t) : value_(std::move(t)){}
         Defaulted(DefaultValue) : value_(DefaultedParameters...) {}
-        T const& get() const { return value_; }
-        T & get() { return value_; }
+        T const& get_or_value() const { return value_; }
+        T & get_or_value() { return value_; }
     private:
         T value_;
     };
@@ -24,8 +24,8 @@ namespace fluent
     public:
         DefaultedF(T t) : value_(std::move(t)){}
         DefaultedF(DefaultValue) : value_(GetValue::get()) {}
-        T const& get() const { return value_; }
-        T & get() { return value_; }
+        T const& get_or_value() const { return value_; }
+        T & get_or_value() { return value_; }
     private:
         T value_;
     };
