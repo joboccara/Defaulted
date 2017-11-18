@@ -3,32 +3,33 @@
 
 namespace fluent
 {
-    struct DefaultValue{};
-    static const DefaultValue defaultValue;
-    
-    template<typename T, T... DefaultedParameters>
-    class Defaulted
-    {
-    public:
-        Defaulted(T t) : value_(std::move(t)){}
-        Defaulted(DefaultValue) : value_(DefaultedParameters...) {}
-        T const& get_or_value() const { return value_; }
-        T & get_or_value() { return value_; }
-    private:
-        T value_;
-    };
-    
-    template<typename T, typename GetValue>
-    class DefaultedF
-    {
-    public:
-        DefaultedF(T t) : value_(std::move(t)){}
-        DefaultedF(DefaultValue) : value_(GetValue::get()) {}
-        T const& get_or_value() const { return value_; }
-        T & get_or_value() { return value_; }
-    private:
-        T value_;
-    };
+
+struct DefaultValue{};
+static const DefaultValue defaultValue;
+
+template<typename T, T... DefaultedParameters>
+class Defaulted
+{
+public:
+    Defaulted(T t) : value_(std::move(t)){}
+    Defaulted(DefaultValue) : value_(DefaultedParameters...) {}
+    T const& get_or_default() const { return value_; }
+    T & get_or_default() { return value_; }
+private:
+    T value_;
+};
+
+template<typename T, typename GetValue>
+class DefaultedF
+{
+public:
+    DefaultedF(T t) : value_(std::move(t)){}
+    DefaultedF(DefaultValue) : value_(GetValue::get()) {}
+    T const& get_or_default() const { return value_; }
+    T & get_or_default() { return value_; }
+private:
+    T value_;
+};
 
 }
 

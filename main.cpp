@@ -6,7 +6,7 @@
 
 int f1(int , fluent::Defaulted<int, 42> y, int )
 {
-    return y.get_or_value();
+    return y.get_or_default();
 }
 
 TEST_CASE("Default value", "[Defaulted]")
@@ -21,7 +21,7 @@ TEST_CASE("Value provided", "[Defaulted]")
 
 std::string f2(int , fluent::Defaulted<std::string> y, int )
 {
-    return y.get_or_value();
+    return y.get_or_default();
 }
 
 TEST_CASE("Default constructor", "[Defaulted]")
@@ -38,7 +38,7 @@ struct GetDefaultAmount{ static double get(){ return 45.6; } };
 
 double f3(int x, fluent::DefaultedF<double, GetDefaultAmount> y, int z)
 {
-    return y.get_or_value();
+    return y.get_or_default();
 }
 
 TEST_CASE("DefaultedF Default value", "[DefaultedF]")
