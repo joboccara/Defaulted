@@ -12,14 +12,14 @@ static const DefaultValue defaultValue;
 template<typename T>
 using IsNotReference = typename std::enable_if<!std::is_reference<T>::value, void>::type;
 
-    template<typename T, T... DefaultedParameters>
+    template<typename T, T... DefaultedParameter>
 class Defaulted
 {
 public:
     Defaulted(T const& t) : value_(t){}
     template<typename T_ = T, typename = IsNotReference<T_>>
     Defaulted(T&& t) : value_(std::move(t)){}
-    Defaulted(DefaultValue) : value_(DefaultedParameters...) {}
+    Defaulted(DefaultValue) : value_(DefaultedParameter...) {}
     T const& get_or_default() const { return value_; }
     T & get_or_default() { return value_; }
 private:
